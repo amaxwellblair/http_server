@@ -1,4 +1,7 @@
 require 'socket'
+require 'hurley'
+# http://127.0.0.1:9292
+
 tcp_server = TCPServer.new(9292)
 client = tcp_server.accept
 
