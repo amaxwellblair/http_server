@@ -8,10 +8,6 @@ require 'minitest/pride'
 require 'pry'
 require 'time'
 
-# `screen -d -m -S "Ruby Server" ruby ./lib/ruby_built_server.rb`
-# `ruby ./lib/ruby_built_server.rb &>dev/null &`
-# probaly want to create a bash script to run both more effectively
-# doesn't properly open and close at the moment
 
 class HttpServerTest < Minitest::Test
   attr_reader :client, :debug_info, :html_begin, :html_end
