@@ -57,11 +57,6 @@ class HttpServerTest < Minitest::Test
     end
   end
 
-  # def restart_helper
-  #   `ruby ./lib/ruby_built_server.rb`
-  # end
-
-
   def test_response_success
     response = Hurley.get("http://127.0.0.1:9292")
     assert response.success?

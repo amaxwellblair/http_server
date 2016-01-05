@@ -1,0 +1,4 @@
+1. Josh/Horace How should we think about shutdowns in test
+2. Different browsers produce different requests
+3. Functional vs. OOP
+4. 
