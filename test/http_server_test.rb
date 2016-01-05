@@ -8,6 +8,8 @@ require 'minitest/pride'
 require 'pry'
 require 'time'
 
+`ruby ./lib/ruby_built_server.rb &>/dev/null &`
+
 class HttpServerTest < Minitest::Test
   attr_reader :client, :debug_info, :html_begin, :html_end
 
