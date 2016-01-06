@@ -46,6 +46,7 @@ class Request
   end
 
   def param
+    return nil if first_line[1].split("?")[1].nil?
     param_find_all(first_line[1].split("?")[1])
   end
 

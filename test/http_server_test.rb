@@ -1,5 +1,3 @@
-require 'simplecov'
-SimpleCov.start
 require 'hurley'
 require 'socket'
 require 'minitest'
@@ -81,7 +79,7 @@ class HttpServerTest < Minitest::Test
     end
   end
 
-  def test_date_time
+  def test_date_time_path
     path = "/datetime"
     response = client.get path do |req|
       req.url
