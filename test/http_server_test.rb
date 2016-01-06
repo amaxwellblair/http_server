@@ -106,6 +106,31 @@ class HttpServerTest < Minitest::Test
     assert_equal html_begin + "WORD is not a known word" +  html_end, response.body
   end
 
+  def test_first_post_starts_game
+    skip
+    param = ""
+    path = "/start_game"
+    response = client.post (path + param)
+    assert_equal html_begin + "Good luck!" + html_end, response.body
+  end
+
+  def test_get_game
+    skip
+    param = ""
+    path = "/game"
+    response = client.post (path + param)
+    assert_equal html_begin + "Total Guesses: 0\n You have not guessed!" + html_end, response.body
+  end
+
+  def test_post_game
+    skip
+    param = "?guess=1"
+    path = "/game"
+    response = client.post (path + param)
+    assert_equal html_begin + "Total Guesses: 0\n Your guess '1' is too high" + html_end, response.body
+  end
+
+
   # def test_shut_down
   #   response_helper
   #   path = "/hello"

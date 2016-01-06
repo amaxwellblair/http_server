@@ -12,7 +12,7 @@ class Response
     @circuitbreaker = -1
   end
 
-  def path_list
+  def path_finder
     response_counter
     formatted_request = request.path.gsub("/","")
     if respond_to?(formatted_request.to_sym)
@@ -67,7 +67,7 @@ class Response
   end
 
   def body
-    path_list
+    path_finder
   end
 
 end

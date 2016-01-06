@@ -4,7 +4,8 @@ require 'socket'
 require 'hurley'
 require 'time'
 require 'request'
-# http://127.0.0.1:9292
+require 'header'
+URL = "http://127.0.0.1:9292/"
 
 tcp_server = TCPServer.new(9292)
 
@@ -27,15 +28,11 @@ while true
   output_prep = response.body
 
   output = "<html><head></head><body><pre>#{output_prep}</pre></body></html>"
-  headers = ["http/1.1 200 ok",
-            "date: #{Time.now.strftime('%a, %e %b %Y %H:%M:%S %z')}",
-            "server: ruby",
-            "content-type: text/html; charset=iso-8859-1",
-            "content-length: #{output.length}\r\n\r\n"].join("\r\n")
-  client.puts headers
+  headers = Header.new(request, output, URL)
+  client.puts headers.create
   client.puts output
 
-  puts ["Wrote this response:", headers, output].join("\n")
+  puts ["Wrote this response:", headers.create, output].join("\n")
 
   client.close
   puts "\nResponse complete"
