@@ -9,5 +9,5 @@
 # doesn't properly open and close at the moment
 # Easy server testing: (bash script)
 # server_test () { ruby ./lib/ruby_built_server.rb &>/dev/null &
-# mrspec;
+# mrspec && ruby ./lib/shut_down.rb;
 # }

@@ -90,20 +90,38 @@ class HttpServerTest < Minitest::Test
     assert_equal html_begin + "#{time_helper}\n#{debug_info}" + html_end, response.body
   end
 
-  def test_shut_down
-    response_helper
-    path = "/hello"
-    3.times do |i|
-      response = client.get path do |req|
-        req.url
-      end
-    end
-    path = "/shutdown"
-    response = client.get path do |req|
+  def test_word_exists
+    param = "?word=word"
+    path = "/word_search"
+    response = client.get (path + param) do |req|
       req.url
     end
-    parse_helper(path)
-    assert_equal html_begin + "Total Requests: #{3}\n#{debug_info}" + html_end, response.body
+    assert_equal html_begin + "WORD is a known word" +  html_end, response.body
   end
+
+  def test_word_does_not_exist
+    param = "?word=djns"
+    path = "/word_search"
+    response = client.get (path + param) do |req|
+      req.url
+    end
+    assert_equal html_begin + "WORD is not a known word" +  html_end, response.body
+  end
+
+  # def test_shut_down
+  #   response_helper
+  #   path = "/hello"
+  #   3.times do |i|
+  #     response = client.get path do |req|
+  #       req.url
+  #     end
+  #   end
+  #   path = "/shutdown"
+  #   response = client.get path do |req|
+  #     req.url
+  #   end
+  #   parse_helper(path)
+  #   assert_equal html_begin + "Total Requests: #{3}\n#{debug_info}" + html_end, response.body
+  # end
 
 end
