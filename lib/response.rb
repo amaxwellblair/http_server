@@ -12,6 +12,16 @@ class Response
     @circuitbreaker = -1
   end
 
+  def path_list
+    response_counter
+    formatted_request = request.path.gsub("/","")
+    if respond_to?(formatted_request.to_sym)
+      send(formatted_request)
+    else
+      root
+    end
+  end
+
   def root
     request.parse
   end
@@ -30,7 +40,7 @@ class Response
     root
   end
 
-  def response_restart
+  def shutdown_restart
     @response_count = -1
     root
   end
@@ -54,38 +64,6 @@ class Response
     else
       "WORD is not a known word"
     end
-  end
-
-  def path_list
-    response_counter
-    # {
-    #  "/" => root,
-    #  "/hello" => hello,
-    #  "/hello_restart" => hello_restart,
-    #  "/datetime" => datetime,
-    #  "/shutdown" => shutdown,
-    #  "/shutdown_restart" => response_restart,
-    #  "/word_search" => word_search
-    # }
-
-     if "/" == request.path
-       root
-     elsif "/hello" == request.path
-       hello
-     elsif "/hello_restart" == request.path
-       hello_restart
-     elsif "/datetime" == request.path
-       datetime
-     elsif "/shutdown" == request.path
-       shutdown
-     elsif "/shutdown_restart" == request.path
-       response_restart
-     elsif "/word_search" == request.path
-       word_search
-     else
-       root
-     end
-
   end
 
   def body

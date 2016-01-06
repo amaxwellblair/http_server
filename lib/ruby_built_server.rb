@@ -24,10 +24,9 @@ while true
 
   request = Request.new(request_lines)
   response.request = request
+  output_prep = response.body
 
-  puts request
-
-  output = "<html><head></head><body><pre>#{response.body}</pre></body></html>"
+  output = "<html><head></head><body><pre>#{output_prep}</pre></body></html>"
   headers = ["http/1.1 200 ok",
             "date: #{Time.now.strftime('%a, %e %b %Y %H:%M:%S %z')}",
             "server: ruby",
@@ -41,7 +40,7 @@ while true
   client.close
   puts "\nResponse complete"
 
-  if response.body.include?("Total Requests:")
+  if output.include?("Total Requests:")
     break
   end
 end
