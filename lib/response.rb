@@ -2,7 +2,7 @@ require 'time'
 require 'game'
 
 class Response
-  attr_accessor :request, :hello_count, :response_count, :circuitbreaker, :the_game
+  attr_accessor :request, :hello_count, :response_count, :circuitbreaker, :the_game, :the_body
 
   DICT = File.readlines("/usr/share/dict/words")
 
@@ -69,7 +69,11 @@ class Response
   end
 
   def body
-    path_finder
+    @the_body = "<html><head></head><body><pre>#{path_finder}</pre></body></html>"
+  end
+
+  def output_length
+    the_body.length
   end
 
   def start_game

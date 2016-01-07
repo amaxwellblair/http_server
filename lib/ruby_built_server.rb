@@ -25,10 +25,9 @@ while true
 
   request = Request.new(request_lines)
   response.request = request
-  output_prep = response.body
 
-  output = "<html><head></head><body><pre>#{output_prep}</pre></body></html>"
-  headers = Header.new(request, output, URL)
+  output = response.body
+  headers = Header.new(request, response, URL)
   client.puts headers.create
   client.puts output
 

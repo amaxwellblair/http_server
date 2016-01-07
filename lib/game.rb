@@ -1,12 +1,15 @@
 class Game
 
-  attr_reader :guess, :number, :guess_count
+  attr_reader :guess, :number, :guess_count, :turn_counter
 
   def initialize(number)
     @number = number
     @guess_count = 0
     @guess = nil
+    @turn_counter
   end
+
+  def turn_counter
 
   def status?
     if guess.nil?

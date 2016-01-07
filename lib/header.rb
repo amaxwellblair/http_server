@@ -16,7 +16,7 @@ class Header
               "date: #{Time.now.strftime('%a, %e %b %Y %H:%M:%S %z')}",
               "server: ruby",
               "content-type: text/html; charset=iso-8859-1",
-              "content-length: #{response.length}\r\n\r\n"].join("\r\n")
+              "content-length: #{response.output_length}\r\n\r\n"].join("\r\n")
     headers
   end
 
@@ -59,7 +59,17 @@ class Header
   end
 
   def start_game
-    root
+    if request.verb == "GET"
+      root
+    elsif request.verb == "POST"
+      if response.game.turn_count > 0
+        @url = url
+        @response_code = moved_permanently
+      else
+        @url = url
+        @response_code = forbidden
+      end
+    end
   end
 
   def game
