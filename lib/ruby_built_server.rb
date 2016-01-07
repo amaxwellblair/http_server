@@ -1,4 +1,5 @@
 $LOAD_PATH.unshift(__dir__)
+require 'server'
 require 'response'
 require 'socket'
 require 'hurley'
@@ -11,37 +12,16 @@ tcp_server = TCPServer.new(9292)
 
 response = Response.new
 
-
-
 begin
   while true
-    client = tcp_server.accept
-    puts "Ready for a request"
-    request_lines = []
-    while line = client.gets and !line.chomp.empty?
-      request_lines << line.chomp
-    end
-
-    puts "Got this request:"
-    puts request_lines.inspect
-    puts "Sending response."
-
-    request = Request.new(request_lines)
+    server = Server.new(tcp_server)
+    raw_request = server.receive_request
+    request = Request.new(raw_request)
     response.request = request
     output = response.body
     headers = Header.new(request, response, URL)
-    client.puts headers.create
-    client.puts output
-
-    puts ["Wrote this response:", headers.create, output].join("\n")
-
-    puts "\nResponse complete"
-
-    client.close
-
-    if output.include?("Total Requests:")
-      break
-    end
+    server.send_response(output, headers)
+    break if shutdown(output)
   end
 
 rescue => error
