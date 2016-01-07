@@ -12,6 +12,7 @@ class Response
     @response_count = -1
     @circuitbreaker = -1
     @the_game = nil
+    @response_counter = 0
   end
 
   def path_finder
@@ -77,11 +78,13 @@ class Response
   end
 
   def start_game
-    if request.verb == 'POST'
-      @the_game = Game.new(34)
+    if request.verb == 'GET' && the_game.turn_count == 1
+      the_game.turn_counter
       "Good luck!"
-    elsif request.verb == 'GET'
-      root
+    elsif request.verb == 'POST' && the_game.nil?
+      @the_game = Game.new(34)
+    else
+      ""
     end
   end
 
@@ -94,10 +97,23 @@ class Response
       end
     elsif request.verb == "POST"
       if the_game.class == Game
-        the_game.make_guess(request.param[:guess].to_i)
+        number = request.param[:guess].to_i if !request.param.nil?
+        the_game.make_guess(number ||= nil)
       else
         "You haven't started a game yet!"
       end
+    end
+  end
+
+  def force_error
+    raise RuntimeError
+  end
+
+  def error_back_trace(input = nil)
+    if input.nil?
+      @back_trace
+    else
+      @back_trace ||= input
     end
   end
 

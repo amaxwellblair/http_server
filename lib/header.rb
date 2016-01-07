@@ -1,22 +1,24 @@
 require 'time'
 
 class Header
-  attr_accessor :request, :response, :url, :response_code
+  attr_accessor :request, :response, :url, :response_code, :new_url
 
   def initialize(request, response, url = "http://127.0.0.1:9292/")
     @request = request
     @response = response
     @url = url
+    @new_url = url
   end
 
   def create
     path_finder
     headers = ["http/1.1 #{response_code}",
-              "location: #{url}",
+              "location: #{new_url}",
               "date: #{Time.now.strftime('%a, %e %b %Y %H:%M:%S %z')}",
               "server: ruby",
               "content-type: text/html; charset=iso-8859-1",
               "content-length: #{response.output_length}\r\n\r\n"].join("\r\n")
+    @new_url = url
     headers
   end
 
@@ -24,14 +26,16 @@ class Header
     formatted_request = request.path.gsub("/","")
     if respond_to?(formatted_request.to_sym)
       send(formatted_request)
-    else
+    elsif formatted_request == ""
       root
+    else
+      @response_code = not_found
     end
   end
 
   def root
     @response_code = ok
-    @url = url
+    @new_url = url
   end
 
   def hello
@@ -62,11 +66,12 @@ class Header
     if request.verb == "GET"
       root
     elsif request.verb == "POST"
-      if response.game.turn_count > 0
-        @url = url
+      if response.the_game.turn_count == 0
+        @new_url = (url[0..-2] + request.path)
         @response_code = moved_permanently
+        response.the_game.turn_counter
       else
-        @url = url
+        @new_url = (url[0..-2] + request.path)
         @response_code = forbidden
       end
     end
@@ -76,9 +81,15 @@ class Header
     if request.verb == "GET"
       root
     elsif request.verb == "POST"
-      @url = (url[0..-2] + request.path)
+      @new_url = (url[0..-2] + request.path)
       @response_code = moved_permanently
     end
+  end
+
+  def error_back_trace
+
+    @response_code = internal_server_error
+    @new_url = url
   end
 
   def ok

@@ -3,6 +3,7 @@ class Request
 
   def initialize(request)
     @request = request
+    @path = 0
   end
 
   def param_find_all(str)
@@ -41,7 +42,7 @@ class Request
     first_line[0]
   end
 
-  def path
+  def path(input = nil)
     first_line[1].split("?")[0]
   end
 
