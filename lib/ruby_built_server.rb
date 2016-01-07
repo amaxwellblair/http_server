@@ -21,24 +21,15 @@ begin
     output = response.body
     headers = Header.new(request, response, URL)
     server.send_response(output, headers)
-    break if shutdown(output)
+    break if server.shut_down?(output)
   end
 
 rescue => error
-  request_lines[0] = request_lines[0].sub("/force_error", "/error_back_trace")
-  request = Request.new(request_lines)
+  raw_request[0] = raw_request[0].sub("/force_error", "/error_back_trace")
+  request = Request.new(raw_request)
   response.request = request
   response.error_back_trace(error.backtrace.join("\n"))
-  puts response.request.path
   output = response.body
-
   headers = Header.new(request, response, URL)
-  client.puts headers.create
-  client.puts output
-
-  puts ["Wrote this response:", headers.create, output].join("\n")
-
-  puts "\nResponse complete"
-
-  client.close
+  server.send_response(output, headers)
 end
