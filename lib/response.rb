@@ -1,7 +1,8 @@
 require 'time'
+require 'game'
 
 class Response
-  attr_accessor :request, :hello_count, :response_count, :circuitbreaker
+  attr_accessor :request, :hello_count, :response_count, :circuitbreaker, :the_game
 
   DICT = File.readlines("/usr/share/dict/words")
 
@@ -10,6 +11,7 @@ class Response
     @hello_count = -1
     @response_count = -1
     @circuitbreaker = -1
+    @the_game = nil
   end
 
   def path_finder
@@ -68,6 +70,31 @@ class Response
 
   def body
     path_finder
+  end
+
+  def start_game
+    if request.verb == 'POST'
+      @the_game = Game.new(34)
+      "Good luck!"
+    elsif request.verb == 'GET'
+      root
+    end
+  end
+
+  def game
+    if request.verb == "GET"
+      if the_game.class == Game
+        the_game.status?
+      else
+        "You haven't started a game yet!"
+      end
+    elsif request.verb == "POST"
+      if the_game.class == Game
+        the_game.make_guess(request.param[:guess].to_i)
+      else
+        "You haven't started a game yet!"
+      end
+    end
   end
 
 end

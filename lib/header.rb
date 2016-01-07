@@ -58,6 +58,19 @@ class Header
     root
   end
 
+  def start_game
+    root
+  end
+
+  def game
+    if request.verb == "GET"
+      root
+    elsif request.verb == "POST"
+      @url = (url[0..-2] + request.path)
+      @response_code = moved_permanently
+    end
+  end
+
   def ok
     "200 OK"
   end

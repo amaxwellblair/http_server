@@ -55,6 +55,12 @@ class HttpServerTest < Minitest::Test
     end
   end
 
+  def start_game_helper
+    param = ""
+    path = "/start_game"
+    client.post (path + param)
+  end
+
   def test_response_success
     response = Hurley.get("http://127.0.0.1:9292")
     assert response.success?
@@ -107,28 +113,50 @@ class HttpServerTest < Minitest::Test
   end
 
   def test_first_post_starts_game
-    skip
     param = ""
     path = "/start_game"
     response = client.post (path + param)
     assert_equal html_begin + "Good luck!" + html_end, response.body
   end
 
-  def test_get_game
-    skip
+  def test_get_game_no_guesses
+    start_game_helper
     param = ""
     path = "/game"
-    response = client.post (path + param)
-    assert_equal html_begin + "Total Guesses: 0\n You have not guessed!" + html_end, response.body
+    response = client.get (path + param)
+    assert_equal html_begin + "You have not made any guesses!" + html_end, response.body
   end
 
-  def test_post_game
-    skip
-    param = "?guess=1"
+  def test_post_game_too_high
+    start_game_helper
+    param = "?guess=40"
     path = "/game"
     response = client.post (path + param)
-    assert_equal html_begin + "Total Guesses: 0\n Your guess '1' is too high" + html_end, response.body
+    assert_equal html_begin + ("You've made 1 guess(es).\n40 is too damn high!") + html_end, response.body
   end
+
+  def test_post_game_too_low
+    start_game_helper
+    param = "?guess=10"
+    path = "/game"
+    response = client.post (path + param)
+    assert_equal html_begin + "You've made 1 guess(es).\n10 is too low..." + html_end, response.body
+  end
+
+  def test_post_game_just_right
+    start_game_helper
+    param = "?guess=34"
+    path = "/game"
+    response = client.post (path + param)
+    assert_equal html_begin + ("You've made 1 guess(es).\nYou win! OMG!!!!@@ CONGRATULATIONS!!!") + html_end, response.body
+  end
+
+#   ("You've made #{guess_count} guess(es).\n" +
+#   "#{guess} is too low...")
+# elsif guess > number
+#   ("You've made #{guess_count} guess(es).\n" +
+#   "#{guess} is too damn high!")
+# end
 
 
   # def test_shut_down
