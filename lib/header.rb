@@ -87,7 +87,6 @@ class Header
   end
 
   def error_back_trace
-
     @response_code = internal_server_error
     @new_url = url
   end
