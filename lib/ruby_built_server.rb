@@ -12,14 +12,19 @@ tcp_server = TCPServer.new(9292)
 
 response = Response.new
 
+#Request (Take Input) -> Do Something -> Response (Send Output)
+
 begin
   while true
     server = Server.new(tcp_server)
     raw_request = server.receive_request
     request = Request.new(raw_request)
+
     response.request = request
     output = response.body
     headers = Header.new(request, response, URL)
+    # path = PathHandler.new(request)
+    # server.send(path.response)
     server.send_response(output, headers)
     break if server.shut_down?(output)
   end

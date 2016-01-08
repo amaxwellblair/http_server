@@ -6,7 +6,6 @@ require 'minitest/pride'
 require 'pry'
 require 'time'
 
-
 class HttpServerTest < Minitest::Test
   attr_reader :client, :debug_info, :html_begin, :html_end
 
@@ -43,16 +42,12 @@ class HttpServerTest < Minitest::Test
 
   def hello_helper
     path = "/hello_restart"
-    response = client.get path do |req|
-      req.url
-    end
+    response = client.get path
   end
 
   def response_helper
     path = "/shutdown_restart"
-    response = client.get path do |req|
-      req.url
-    end
+    response = client.get path
   end
 
   def test_A_response_success
@@ -61,9 +56,7 @@ class HttpServerTest < Minitest::Test
   end
 
   def test_B_root_path
-    response = client.get "" do |req|
-      req.url
-    end
+    response = client.get ""
     assert_equal html_begin + debug_info + html_end, response.body
   end
 
@@ -71,9 +64,7 @@ class HttpServerTest < Minitest::Test
     hello_helper
     path = "/hello"
     3.times do |i|
-      response = client.get path do |req|
-        req.url
-      end
+      response = client.get path
       parse_helper(path)
       assert_equal html_begin + "Hello, World! (#{i})\n#{debug_info}" + html_end, response.body
     end
@@ -81,9 +72,7 @@ class HttpServerTest < Minitest::Test
 
   def test_D_date_time_path
     path = "/datetime"
-    response = client.get path do |req|
-      req.url
-    end
+    response = client.get path
     parse_helper(path)
     assert_equal html_begin + "#{time_helper}\n#{debug_info}" + html_end, response.body
   end
@@ -91,18 +80,14 @@ class HttpServerTest < Minitest::Test
   def test_E_word_exists
     param = "?word=word"
     path = "/word_search"
-    response = client.get (path + param) do |req|
-      req.url
-    end
+    response = client.get (path + param)
     assert_equal html_begin + "WORD is a known word" +  html_end, response.body
   end
 
   def test_F_word_does_not_exist
     param = "?word=djns"
     path = "/word_search"
-    response = client.get (path + param) do |req|
-      req.url
-    end
+    response = client.get (path + param)
     assert_equal html_begin + "WORD is not a known word" +  html_end, response.body
   end
 
@@ -113,7 +98,7 @@ class HttpServerTest < Minitest::Test
     assert_equal html_begin + "Good luck!" + html_end, response.body
   end
 
-  def test_H_first_post_returns_nothing_game
+  def test_H_second_post_returns_nothing_game
     param = ""
     path = "/start_game"
     response = client.post (path + param)
@@ -160,14 +145,10 @@ class HttpServerTest < Minitest::Test
     response_helper
     path = "/hello"
     3.times do |i|
-      response = client.get path do |req|
-        req.url
-      end
+      response = client.get path
     end
     path = "/shutdown"
-    response = client.get path do |req|
-      req.url
-    end
+    response = client.get path
     parse_helper(path)
     assert_equal html_begin + "Total Requests: #{3}\n#{debug_info}" + html_end, response.body
   end
