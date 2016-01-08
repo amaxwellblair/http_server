@@ -42,7 +42,7 @@ class FakeGame
 
 end
 
-class FakeResponseBadPath
+class FakeRequestBadPath
 
   def path
       "/omgdoubles"
@@ -88,10 +88,9 @@ class HeaderTest < Minitest::Test
   end
 
   def test_path_finder_not_found
-    skip
-    #edit this header = Header.new(FakeRequest.new, FakeResponse.new, "http://127.0.0.1:9292/")
-    header.path_finder
-    assert_equal "404 Not Found", header.response_code
+    header_bad_path = Header.new(FakeRequestBadPath.new, FakeResponse.new, "http://127.0.0.1:9292/")
+    header_bad_path.path_finder
+    assert_equal "404 Not Found", header_bad_path.response_code
   end
 
 end
