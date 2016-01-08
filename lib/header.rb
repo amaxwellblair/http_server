@@ -50,7 +50,7 @@ class Header
     root
   end
 
-  def wordsearch
+  def word_search
     root
   end
 

@@ -1,10 +1,9 @@
 require 'time'
 require 'game'
 
+
 class Response
   attr_accessor :request, :hello_count, :response_count, :circuitbreaker, :the_game, :the_body
-
-  DICT = File.readlines("/usr/share/dict/words")
 
   def initialize(request = nil)
     @request = request
@@ -14,6 +13,8 @@ class Response
     @the_game = nil
     @response_counter = 0
   end
+
+  DICT = File.readlines("/usr/share/dict/words")
 
   def path_finder
     response_counter
@@ -97,7 +98,7 @@ class Response
       end
     elsif request.verb == "POST"
       if the_game.class == Game
-        number = request.body[:guess].to_i if !request.body.nil?
+        number = request.param[:guess].to_i if !request.param.nil?
         the_game.make_guess(number ||= nil)
       else
         "You haven't started a game yet!"
