@@ -27,15 +27,15 @@ class Request
   end
 
   def first_line
-    @first_line ||= request[0].split(" ")
+    request[0].split(" ")
   end
 
   def fourth_line
-    @fourth_line ||= request[3].split(": ")
+    request[3].split(": ")
   end
 
   def sixth_line
-    @sixth_line ||= request[5].split(":")
+    request[5].split(":")
   end
 
   def verb

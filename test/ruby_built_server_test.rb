@@ -113,6 +113,7 @@ class HttpServerTest < Minitest::Test
   end
 
   def test_J_post_game_too_high
+    skip
     param = "?guess=40"
     path = "/game"
     response = client.post (path + param)
@@ -120,6 +121,7 @@ class HttpServerTest < Minitest::Test
   end
 
   def test_K_post_game_too_low
+    skip
     param = "?guess=10"
     path = "/game"
     response = client.post (path + param)
@@ -127,6 +129,7 @@ class HttpServerTest < Minitest::Test
   end
 
   def test_L_post_game_just_right
+    skip
     param = "?guess=34"
     path = "/game"
     response = client.post (path + param)

@@ -1,6 +1,5 @@
 require 'pry'
 
-
 class Server
   attr_accessor :client, :empty_lines
 
