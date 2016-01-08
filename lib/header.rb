@@ -18,7 +18,6 @@ class Header
               "server: ruby",
               "content-type: text/html; charset=iso-8859-1",
               "content-length: #{response.output_length}\r\n\r\n"].join("\r\n")
-    @new_url = url
     headers
   end
 
@@ -35,7 +34,6 @@ class Header
 
   def root
     @response_code = ok
-    @new_url = url
   end
 
   def hello
@@ -88,7 +86,6 @@ class Header
 
   def error_back_trace
     @response_code = internal_server_error
-    @new_url = url
   end
 
   def ok
@@ -97,10 +94,6 @@ class Header
 
   def moved_permanently
     "301 Moved Permanently"
-  end
-
-  def unauthorized
-    "401 Unauthorized"
   end
 
   def forbidden

@@ -91,7 +91,7 @@ class Response
   def game
     if request.verb == "GET"
       if the_game.class == Game
-        the_game.status?
+        the_game.status
       else
         "You haven't started a game yet!"
       end

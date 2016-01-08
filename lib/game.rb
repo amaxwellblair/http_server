@@ -13,7 +13,7 @@ class Game
     @turn_count += 1
   end
 
-  def status?
+  def status
     turn_counter
     if guess.nil?
       "You have not made any guesses!"
