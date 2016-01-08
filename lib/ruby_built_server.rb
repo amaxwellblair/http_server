@@ -6,9 +6,9 @@ require 'hurley'
 require 'time'
 require 'request'
 require 'header'
-URL = "http://127.0.0.1:9292/"
+URL = "http://127.0.0.1:#{ARGV[0]}/"
 
-tcp_server = TCPServer.new(9292)
+tcp_server = TCPServer.new(ARGV[0].to_i)
 
 response = Response.new
 

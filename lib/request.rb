@@ -51,6 +51,11 @@ class Request
     param_find_all(first_line[1].split("?")[1])
   end
 
+  def body
+    return nil if request.last.split("?")[1].nil?
+    param_find_all(request.last.split("?")[1])
+  end
+
   def protocol
     first_line[2]
   end

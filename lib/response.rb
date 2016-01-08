@@ -97,7 +97,7 @@ class Response
       end
     elsif request.verb == "POST"
       if the_game.class == Game
-        number = request.param[:guess].to_i if !request.param.nil?
+        number = request.body[:guess].to_i if !request.body.nil?
         the_game.make_guess(number ||= nil)
       else
         "You haven't started a game yet!"
