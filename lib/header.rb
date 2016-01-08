@@ -1,7 +1,9 @@
 require 'time'
+require 'response_codes'
 
 class Header
   attr_accessor :request, :response, :url, :response_code, :new_url
+  include ResponseCodes
 
   def initialize(request, response, url = "http://127.0.0.1:9292/")
     @request = request
@@ -52,14 +54,6 @@ class Header
     root
   end
 
-  def hello_restart
-    root
-  end
-
-  def shutdown_restart
-    root
-  end
-
   def start_game
     if request.verb == "GET"
       root
@@ -88,24 +82,8 @@ class Header
     @response_code = internal_server_error
   end
 
-  def ok
-    "200 OK"
-  end
-
-  def moved_permanently
-    "301 Moved Permanently"
-  end
-
-  def forbidden
-    "403 Forbidden"
-  end
-
-  def not_found
-    "404 Not Found"
-  end
-
-  def internal_server_error
-    "500 Internal Server Error"
+  def shutdown_restart
+    root
   end
 
 end
