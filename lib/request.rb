@@ -1,8 +1,8 @@
 class Request
-  attr_accessor :raw_header
+  attr_accessor :request
 
-  def initialize(raw_header)
-    @raw_header = raw_header
+  def initialize(request)
+    @request = request  
     @path = 0
   end
 
@@ -28,16 +28,36 @@ class Request
 
   # ["GET / HTTP/1.1", "Host: 127.0.0.1:9292", "Accept-Encoding: gzip, deflate", "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/601.3.9 (KHTML, like Gecko) Version/9.0.2 Safari/601.3.9", "Accept-Language: en-us", "Cache-Control: max-age=0", "Connection: keep-alive"]
 
+  # def host
+  #   request[/Host: \S+/]
+  # end
+  #
+  # def accept
+  #   request[/Accept: \S+/]
+  # end
+  #
+  # def protocol
+  #   request[/HTTP\S+/]
+  # end
+  #
+  # def verb
+  #   request[/\S+/]
+  # end
+  #
+  # def path
+  #   request[/\/\S+/]
+  # end
+
   def first_line
-    raw_header[0].split(" ")
+    request[0].split(" ")
   end
 
   def fourth_line
-    raw_header[3].split(": ")
+    request[3].split(": ")
   end
 
   def sixth_line
-    raw_header[5].split(":")
+    request[5].split(":")
   end
 
   def verb
@@ -54,8 +74,8 @@ class Request
   end
 
   def body
-    return nil if raw_header.last.split("?")[1].nil?
-    param_find_all(raw_header.last.split("?")[1])
+    return nil if request.last.split("?")[1].nil?
+    param_find_all(request.last.split("?")[1])
   end
 
   def protocol
